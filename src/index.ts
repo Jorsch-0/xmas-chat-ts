@@ -1,12 +1,10 @@
-import express from 'express';
 import { env } from './config';
+import { app, server } from './socket/socket';
 
 (async () => {
-  const app = express();
-
   await import('./loaders').then((loader) => loader.default({ app }));
 
-  const serverInstance = app
+  server
     .listen(env.PORT, () => {
       console.log(`Server is running on http://localhost:${env.PORT}`);
     })
@@ -22,7 +20,7 @@ import { env } from './config';
       console.error('An unhandled rejection occurred, but the reason was not an Error object');
     }
 
-    serverInstance.close(() => {
+    server.close(() => {
       console.error('Server is closed due to an unhandled rejection');
       process.exit(1);
     });
